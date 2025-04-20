@@ -1,27 +1,33 @@
-spring:
-    application:
-        name: my-api
-    datasource:
-        url: jdbc:postgresql://postgres:5432/${POSTGRESQL_DB_NAME}
-        username: ${POSTGRESQL_USER}
-        password: ${POSTGRESQL_PASSWORD}
-    cache:
-        type: redis
-    redis:
-        host: redis
-        port: 6379
-
-server:
-    port: 8080
-
 logging:
     level:
         root: INFO
-        org:
-            springdoc: DEBUG
+        io.lettuce.core: DEBUG
         org.springframework.web: DEBUG
+        org.springframework.boot.context.config: DEBUG
         org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration: DEBUG
         org.springframework.web.servlet.DispatcherServlet: DEBUG
+
+spring:
+    application:
+        name: my-board-games-api
+    datasource:
+        url: jdbc:postgresql://postgres:5432/${POSTGRESQL_DB_NAME:appdb}
+        username: ${POSTGRESQL_USER:appuser}
+        password: ${POSTGRESQL_PASSWORD:somepassword}
+    cache:
+        type: redis
+    redis:
+        host: ${REDIS_HOST:localhost}
+        port: ${REDIS_PORT:6379}
+        username: ${REDIS_USER:appuser}
+        password: ${REDIS_PASSWORD:somepassword}
+        client-type: lettuce
+        lettuce:
+            client-options:
+                protocol-version: RESP3
+
+server:
+    port: 8080
 
 springdoc:
     swagger-ui:
@@ -35,7 +41,7 @@ jpa:
         ddl-auto: update
     properties:
         hibernate:
-            default_schema: my-board-games
+            default_schema: myboardgames
 
 
 management:

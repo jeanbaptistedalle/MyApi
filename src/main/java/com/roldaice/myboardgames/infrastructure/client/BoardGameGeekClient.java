@@ -7,6 +7,7 @@ import com.roldaice.myboardgames.infrastructure.dto.BoardGamesXmlResponseDto;
 import com.roldaice.myboardgames.infrastructure.mapper.BoardGameDtoMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
@@ -33,6 +34,7 @@ public class BoardGameGeekClient implements IBoardGameGeekClient {
             .build();
     }
 
+    @Cacheable(value = "BoardGameGeek:SearchBoardGames", key = "'name:' + #param")
     public List<BoardGameDto> searchBoardGamesByName(String name) {
         String xml = webClient.get()
             .uri(uriBuilder -> uriBuilder
